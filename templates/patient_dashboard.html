@@ -1,0 +1,67 @@
+<!-- templates/patient_dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Patient Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Welcome, {{ session.name }} (Patient)</h2>
+        <a href="{{ url_for('logout') }}" class="btn btn-secondary">Logout</a>
+    </div>
+
+    <a href="{{ url_for('book_session') }}" class="btn btn-primary mb-3">
+        Book Session
+    </a>
+
+    <h4>Your Booked Sessions</h4>
+
+    {% if sessions %}
+
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Therapist</th>
+                <th>Session Time</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for s in sessions %}
+            <tr>
+                <td>{{ s.therapist_name }}</td>
+                <td>{{ s.session_time }}</td>
+                <td>{{ s.notes }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
+
+    {% else %}
+
+    <p>No sessions booked yet.</p>
+
+    {% endif %}
+
+    <hr>
+
+    <h4>Your Emotion Logs</h4>
+
+    <a href="{{ url_for('view_emotions', patient_id=session.email) }}"
+       class="btn btn-info mb-2">
+       View Emotion Logs
+    </a>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Welcome{% endblock %}
+{% block content %}
+<div class="text-center mt-5">
+    <h2>Welcome to the Emotion Monitoring System</h2>
+    <p class="mt-3">Monitor and analyze emotions using real-time deep learning and AI insights.</p>
+    <a href="{{ url_for('login') }}" class="btn btn-primary me-2">Login</a>
+    <a href="{{ url_for('register') }}" class="btn btn-secondary">Register</a>
+</div>
+{% endblock %}

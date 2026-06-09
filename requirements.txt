@@ -1,0 +1,14 @@
+numpy>=1.23
+pandas
+opencv-python
+matplotlib
+seaborn
+scikit-learn
+tensorflow>=2.10
+flask
+flask_sqlalchemy
+sqlalchemy
+dlib      # optional: if you plan to use dlib for landmarks
+mediapipe # optional for landmarks/3D
+open3d    # optional for 3D visualization
+gunicorn  # optional for production

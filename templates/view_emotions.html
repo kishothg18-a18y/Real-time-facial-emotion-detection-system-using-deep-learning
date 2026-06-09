@@ -1,0 +1,107 @@
+<!-- templates/view_emotions.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Emotion Logs - {{ patient_id }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <script>
+        function showLogs(type) {
+            const rows = document.querySelectorAll(".log-row");
+            rows.forEach(row => {
+                if (row.dataset.type === type) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+
+            document.getElementById("faceBtn").classList.remove("btn-primary");
+            document.getElementById("voiceBtn").classList.remove("btn-primary");
+            document.getElementById("faceBtn").classList.remove("btn-secondary");
+            document.getElementById("voiceBtn").classList.remove("btn-secondary");
+
+            if (type === "FACE") {
+                document.getElementById("faceBtn").classList.add("btn-primary");
+                document.getElementById("voiceBtn").classList.add("btn-secondary");
+            } else {
+                document.getElementById("voiceBtn").classList.add("btn-primary");
+                document.getElementById("faceBtn").classList.add("btn-secondary");
+            }
+        }
+
+        window.onload = function () {
+            showLogs("FACE"); // Default view
+        };
+    </script>
+</head>
+
+<body class="bg-light">
+<div class="container mt-4">
+
+    <h2>Emotion Logs - {{ patient_id }}</h2>
+
+    <!-- Toggle Buttons -->
+    <div class="mb-3">
+        <button id="faceBtn" class="btn btn-primary me-2" onclick="showLogs('FACE')">
+            🎥 Face Emotion
+        </button>
+        <button id="voiceBtn" class="btn btn-secondary" onclick="showLogs('VOICE')">
+            🎤 Voice Emotion
+        </button>
+    </div>
+
+    <!-- Logs Table -->
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Emotion</th>
+                <th>Confidence</th>
+                <th>Date & Time</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for log in logs %}
+            <tr class="log-row" data-type="{{ log[0] }}">
+                {% if log[0] == 'FACE' %}
+                    <td>{{ log[1] }}</td>
+                    <td>
+                        {% if log[2] is not none %}
+                            {{ "%.2f"|format(log[2] * 100) }}%
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                {% else %}
+                    <td>{{ log[3] }}</td>
+                    <td>
+                        {% if log[4] is not none %}
+                            {{ "%.2f"|format(log[4] * 100) }}%
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                {% endif %}
+                <td>
+    {% if log[5] %}
+        {{ log[5].strftime("%d %b %Y • %I:%M %p") if log[5].__class__.__name__ == "datetime" else log[5] }}
+    {% else %}
+        N/A
+    {% endif %}
+</td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ session.role == 'therapist' and url_for('therapist_dashboard') or url_for('patient_dashboard') }}"
+       class="btn btn-secondary mt-2">
+        Back
+    </a>
+
+</div>
+</body>
+</html>
